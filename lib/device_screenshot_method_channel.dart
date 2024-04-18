@@ -26,4 +26,9 @@ class MethodChannelDeviceScreenshot extends DeviceScreenshotPlatform {
   void requestOverlayPermission() async {
     await methodChannel.invokeMethod('requestOverlayPermission');
   }
+
+  @override
+  void mediaProjectionRequest() async {
+    await methodChannel.invokeMethod('mediaProjectionRequest');
+  }
 }

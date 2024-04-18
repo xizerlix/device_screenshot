@@ -75,7 +75,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath 'com.android.tools.build:gradle:7.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -92,7 +92,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 android {
-    compileSdkVersion 33
+    compileSdk 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

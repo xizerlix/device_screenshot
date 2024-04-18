@@ -17,4 +17,8 @@ class DeviceScreenshot {
   Future<Uri?> takeScreenshot() {
     return DeviceScreenshotPlatform.instance.takeScreenshot();
   }
+
+  void mediaProjectionRequest() {
+    DeviceScreenshotPlatform.instance.mediaProjectionRequest();
+  }
 }

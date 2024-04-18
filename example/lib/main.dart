@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -32,9 +34,8 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion = await DeviceScreenshot.instance.getPlatformVersion();
+      // platformVersion = await DeviceScreenshot.instance.getPlatformVersion();
 
-      var v = await DeviceScreenshot.instance.overTheAppPermissionCheck();
       // print('------------------------?>>> $v');
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
@@ -63,11 +64,29 @@ class _MyAppState extends State<MyApp> {
               child: Text('Running on: $_platformVersion\n'),
             ),
             TextButton(
-              onPressed: () {
-                DeviceScreenshot.instance.requestOverlayPermission();
+              onPressed: () async {
+                if (!await DeviceScreenshot.instance.overTheAppPermissionCheck()) {
+                  DeviceScreenshot.instance.requestOverlayPermission();
+                } else {
+                  log('overTheAppPermission already allowed!!');
+                }
               },
               child: Text('PERMISSION'),
-            )
+            ),
+            TextButton(
+              onPressed: () {
+                DeviceScreenshot.instance.mediaProjectionRequest();
+              },
+              child: Text('START SERVICE'),
+            ),
+            TextButton(
+              onPressed: () async {
+                print('hello screenshot is:::');
+                Uri? uri = await DeviceScreenshot.instance.takeScreenshot();
+                print('hello screenshot is::: ${uri?.path}');
+              },
+              child: Text('SCREENSHOT'),
+            ),
           ],
         ),
       ),
