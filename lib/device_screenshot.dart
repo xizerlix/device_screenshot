@@ -6,8 +6,12 @@ class DeviceScreenshot {
 
   static final DeviceScreenshot instance = DeviceScreenshot._();
 
-  Future<bool> overTheAppPermissionCheck() {
-    return DeviceScreenshotPlatform.instance.overTheAppPermissionCheck();
+  Future<bool> checkOverTheAppPermission() {
+    return DeviceScreenshotPlatform.instance.checkOverTheAppPermission();
+  }
+
+  Future<bool> checkMediaProjectionService() {
+    return DeviceScreenshotPlatform.instance.checkMediaProjectionService();
   }
 
   void requestOverlayPermission() {
@@ -18,7 +22,11 @@ class DeviceScreenshot {
     return DeviceScreenshotPlatform.instance.takeScreenshot();
   }
 
-  void mediaProjectionRequest() {
-    DeviceScreenshotPlatform.instance.mediaProjectionRequest();
+  void requestMediaProjection() {
+    DeviceScreenshotPlatform.instance.requestMediaProjection();
+  }
+
+  void stopMediaProjectionService() {
+    DeviceScreenshotPlatform.instance.stopMediaProjectionService();
   }
 }
