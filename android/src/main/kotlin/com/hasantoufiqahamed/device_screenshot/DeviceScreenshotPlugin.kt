@@ -1,6 +1,8 @@
 package com.hasantoufiqahamed.device_screenshot
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.ActivityManager
 import android.app.AppOpsManager
 import android.content.Context
 import androidx.core.content.ContextCompat
@@ -20,11 +22,15 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import com.hasantoufiqahamed.device_screenshot.src.MediaProjectionService
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.PluginRegistry
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -38,17 +44,14 @@ inline fun <reified T> systemService(context: Context): T? =
 
 const val API_APPLICATION_OVERLAY = 26
 
-/** DeviceScreenshotPlugin */
-class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler {
-    /// The MethodChannel that will the communication between Flutter and native Android
-    ///
-    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-    /// when the Flutter Engine is detached from the Activity
+class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.ActivityResultListener {
     private var context: Context? = null
     private lateinit var channel: MethodChannel
-
+    private var activity: Activity? = null
+    private val requestCodeForegroundService = 145758
     private lateinit var mediaProjectionManager: MediaProjectionManager
     private var mediaProjection: MediaProjection? = null
+    private var activityBinding: ActivityPluginBinding? = null
 
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
@@ -64,7 +67,7 @@ class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler {
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
 
-            "overTheAppPermissionCheck" -> {
+            "checkOverTheAppPermission" -> {
                 result.success(canDrawOverlaysCompat(context!!))
             }
 
@@ -72,11 +75,26 @@ class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler {
                 requestOverlayPermission()
             }
 
+            "checkMediaProjectionService" -> {
+                val isRunning = isServiceRunning(context!!, MediaProjectionService::class.java)
+                result.success(isRunning)
+            }
+
+            "stopMediaProjectionService" -> {
+                val stopIntent = Intent(context, MediaProjectionService::class.java)
+                stopIntent.action = MediaProjectionService.ACTION_STOP_SERVICE
+                activity?.startService(stopIntent)
+            }
+
+            "requestMediaProjection" -> {
+                requestMediaProjection()
+            }
+
             "takeScreenshot" -> {
                 captureScreen(object : ImageAndUriAvailableCallback {
                     override fun onImageAndUriAvailable(uri: Uri?) {
                         if (uri != null) {
-                            result.success(uri.toString())
+                            result.success(uri.path)
                         } else {
                             result.notImplemented()
                         }
@@ -223,7 +241,7 @@ class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler {
 
                         image?.close()
                         virtualDisplay?.release()
-                        mediaProjection?.stop()
+//                        mediaProjection?.stop()
                     }
                 },
                 null,
@@ -242,5 +260,66 @@ class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler {
             Bitmap.createBitmap(width + rowPadding / pixelStride, height, Bitmap.Config.ARGB_8888)
         bitmap.copyPixelsFromBuffer(buffer)
         return bitmap
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activityBinding = binding
+        activityBinding?.addActivityResultListener(this)
+        this.activity = binding.activity
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        activityBinding?.removeActivityResultListener(this)
+        activityBinding = null
+        this.activity = null
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDetachedFromActivity() {
+        this.activity = null
+    }
+
+    private fun requestMediaProjection() {
+        val serviceIntent = Intent(activity, MediaProjectionService::class.java)
+        serviceIntent.action = "com.example.action.START_CAPTURE"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ContextCompat.startForegroundService(activity!!, serviceIntent)
+        } else {
+            activity?.startService(serviceIntent)
+        }
+
+        activityBinding?.activity?.startActivityForResult(
+            mediaProjectionManager.createScreenCaptureIntent(),
+            requestCodeForegroundService
+        )
+    }
+
+    private fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
+        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
+        for (service in manager?.getRunningServices(Int.MAX_VALUE) ?: emptyList()) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+        when (requestCode) {
+            requestCodeForegroundService -> {
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data)
+                } else {
+                    val stopIntent = Intent(activity!!, MediaProjectionService::class.java)
+                    stopIntent.action = MediaProjectionService.ACTION_STOP_SERVICE
+                    activity?. startService(stopIntent)
+                    mediaProjection?.stop()
+                }
+            }
+        }
+        return  false
     }
 }
