@@ -11,7 +11,7 @@
 
     <application>
         <service
-            android:name=".MediaProjectionService"
+            android:name=".src.MediaProjectionService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="mediaProjection"

@@ -22,6 +22,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import com.hasantoufiqahamed.device_screenshot.src.MediaProjectionService
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -86,7 +87,7 @@ class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, 
             }
 
             "requestMediaProjection" -> {
-                mediaProjectionRequest()
+                requestMediaProjection()
             }
 
             "takeScreenshot" -> {
@@ -281,7 +282,7 @@ class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, 
         this.activity = null
     }
 
-    private fun mediaProjectionRequest() {
+    private fun requestMediaProjection() {
         val serviceIntent = Intent(activity, MediaProjectionService::class.java)
         serviceIntent.action = "com.example.action.START_CAPTURE"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
