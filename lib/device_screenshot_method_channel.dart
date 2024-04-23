@@ -25,7 +25,6 @@ class MethodChannelDeviceScreenshot extends DeviceScreenshotPlatform {
   Future<Uri?> takeScreenshot() async {
     final uriPath = await methodChannel.invokeMethod<String>('takeScreenshot');
     Uri uri = Uri.file(uriPath ?? '');
-    print('screenshot uri is: ${uri.path}');
     return uriPath == null ? null : uri;
   }
 
