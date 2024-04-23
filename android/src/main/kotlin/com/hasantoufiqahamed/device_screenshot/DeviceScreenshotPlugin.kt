@@ -77,6 +77,8 @@ class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, 
 
             "checkMediaProjectionService" -> {
                 val isRunning = isServiceRunning(context!!, MediaProjectionService::class.java)
+                val mps = mediaProjection.hashCode()
+                Log.d("MPS", "mps is $mps")
                 result.success(isRunning)
             }
 

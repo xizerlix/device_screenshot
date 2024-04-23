@@ -1,3 +1,4 @@
+import 'package:device_screenshot_example/example_button.dart';
 import 'package:flutter/material.dart';
 
 import 'package:device_screenshot/device_screenshot.dart';
@@ -14,69 +15,91 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String message = "";
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TextButton(
-                onPressed: () async {
-                  bool overTheAppPermission = await DeviceScreenshot.instance.checkOverTheAppPermission();
-                  print('overTheAppPermission : $overTheAppPermission');
-                },
-                child: const Text('Check Over The App Permission'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  if(!await DeviceScreenshot.instance.checkOverTheAppPermission()){
-                    DeviceScreenshot.instance.requestMediaProjection();
-                  }
-                },
-                child: const Text('Request Over The App Permission'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  bool mediaProjectionService = await DeviceScreenshot.instance.checkMediaProjectionService();
-                  print('mediaProjectionService : $mediaProjectionService');
-                },
-                child: const Text('Check Media Projection Service'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  if(!await DeviceScreenshot.instance.checkMediaProjectionService()) {
-                    DeviceScreenshot.instance.requestMediaProjection();
-                  }
-                },
-                child: const Text('Request Media Projection Service'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  if(await DeviceScreenshot.instance.checkMediaProjectionService()) {
-                    DeviceScreenshot.instance.stopMediaProjectionService();
-                  }
-                },
-                child: const Text('Stop Media Projection Service'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  Uri? uri = await DeviceScreenshot.instance.takeScreenshot();
-                  if(uri!=null) {
-                    print('hello screenshot is::: ${uri?.path}');
-                  } else {
-                    print('uri is null!!!');
-                  }
-                },
-                child: const Text('TAKE SCREENSHOT'),
-              ),
-            ],
+        body: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: SelectableText(
+                      message,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                ExampleButton(
+                  onPressed: () async {
+                    bool overTheAppPermission = await DeviceScreenshot.instance.checkOverTheAppPermission();
+                    setState(() {
+                      message = 'Over the app permission status: $overTheAppPermission';
+                    });
+                  },
+                  title: 'Check Over The App Permission',
+                ),
+                ExampleButton(
+                  onPressed: () async {
+                    if (!await DeviceScreenshot.instance.checkOverTheAppPermission()) {
+                      DeviceScreenshot.instance.requestOverlayPermission();
+                    }
+                  },
+                  title: 'Request Over The App Permission',
+                ),
+                ExampleButton(
+                  onPressed: () async {
+                    bool mediaProjectionService = await DeviceScreenshot.instance.checkMediaProjectionService();
+                    setState(() {
+                      message = 'Media projection service status: $mediaProjectionService';
+                    });
+                  },
+                  title: 'Check Media Projection Service',
+                ),
+                ExampleButton(
+                  onPressed: () async {
+                    if (!await DeviceScreenshot.instance.checkMediaProjectionService()) {
+                      DeviceScreenshot.instance.requestMediaProjection();
+                    }
+                  },
+                  title: 'Request Media Projection Service',
+                ),
+                ExampleButton(
+                  onPressed: () async {
+                    if (await DeviceScreenshot.instance.checkMediaProjectionService()) {
+                      DeviceScreenshot.instance.stopMediaProjectionService();
+                    }
+                  },
+                  title: 'Stop Media Projection Service',
+                ),
+                ExampleButton(
+                  onPressed: () async {
+                    Uri? uri = await DeviceScreenshot.instance.takeScreenshot();
+                    if (uri != null) {
+                      setState(() {
+                        message = uri.path;
+                      });
+                    } else {
+                      setState(() {
+                        message = 'Screenshot path is: null!';
+                      });
+                    }
+                  },
+                  title: 'TAKE SCREENSHOT',
+                ),
+              ],
+            ),
           ),
         ),
       ),
