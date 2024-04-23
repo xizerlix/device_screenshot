@@ -19,7 +19,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  device_screenshot 0.0.2
+  device_screenshot 0.0.3
 ```
 
 Import the package:
