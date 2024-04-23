@@ -12,15 +12,16 @@ A Flutter plugin that can helps you to take screenshot your overall device using
 
 ## 💻 Usage
 
-Include dependency in your pubspec.yaml file
+First, add ```flutter_native_splash``` as a dependency in your pubspec.yaml file.
 
 ```yml
 dependencies:
   flutter:
     sdk: flutter
 
-  device_screenshot 0.0.3
+  device_screenshot 0.0.4
 ```
+Don't forget to ```flutter pub get```.
 
 Import the package:
 

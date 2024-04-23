@@ -9,3 +9,7 @@
 ## 0.0.3
 
 * Documentation update
+
+## 0.0.4
+
+* Remove ios platform
