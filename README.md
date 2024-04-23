@@ -1,4 +1,4 @@
-<img src="" width="100%" alt="Device Screenshot Banner" />
+<img src="https://github.com/HasanToufiqAhamed/device_screenshot/blob/initial_release/assets/poster.png" width="100%" alt="Device Screenshot Banner" />
 <h2 align="center">
   Device Screenshot
 </h2>
