@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
                 ExampleButton(
                   onPressed: () async {
                     if (!await DeviceScreenshot.instance.checkOverTheAppPermission()) {
-                      DeviceScreenshot.instance.requestMediaProjection();
+                      DeviceScreenshot.instance.requestOverlayPermission();
                     }
                   },
                   title: 'Request Over The App Permission',
