@@ -1,8 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:device_screenshot/device_screenshot.dart';
 import 'package:device_screenshot/device_screenshot_platform_interface.dart';
 import 'package:device_screenshot/device_screenshot_method_channel.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 // class MockDeviceScreenshotPlatform
 //     with MockPlatformInterfaceMixin
