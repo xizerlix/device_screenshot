@@ -19,7 +19,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  plugin_platform_interface: ^2.0.2
+  device_screenshot: ^0.0.5
 ```
 Don't forget to ```flutter pub get```.
 

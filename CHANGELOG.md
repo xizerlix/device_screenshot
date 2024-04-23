@@ -13,3 +13,7 @@
 ## 0.0.4
 
 * Remove ios platform
+
+## 0.0.5
+
+* Remove ios platform and documentation correction
