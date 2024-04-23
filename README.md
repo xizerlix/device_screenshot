@@ -1,4 +1,4 @@
-<img src="https://github.com/HasanToufiqAhamed/device_screenshot/blob/main/assets/poster.png" width="100%" alt="Device Screenshot Banner" />
+<img src="https://raw.githubusercontent.com/HasanToufiqAhamed/device_screenshot/main/assets/poster.png" width="100%" alt="Device Screenshot Banner" />
 <h2 align="center">
   Device Screenshot
 </h2>
@@ -11,6 +11,16 @@ A Flutter plugin that can helps you to take screenshot your overall device using
 
 
 ## 💻 Usage
+
+Include dependency in your pubspec.yaml file
+
+```yml
+dependencies:
+  flutter:
+    sdk: flutter
+
+  device_screenshot 0.0.2
+```
 
 Import the package:
 
