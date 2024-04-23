@@ -19,7 +19,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  device_screenshot 0.0.4
+  device_screenshot ^0.0.4
 ```
 Don't forget to ```flutter pub get```.
 
