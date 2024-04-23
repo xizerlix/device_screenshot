@@ -15,3 +15,18 @@ A Flutter plugin that can helps you to take screenshot your overall device using
 <br>
 This GIF is taken from the <a href="https://github.com/HasanToufiqAhamed/device_screenshot/tree/main/example">Example Project</a>
 </p>
+
+## 💻 Usage
+
+Import the package:
+
+```dart
+import 'package:device_screenshot/device_screenshot.dart';
+```
+
+Use the singleton instance of `DeviceScreenshot` to access all the available methods, for example:
+
+```dart
+DeviceScreenshot.instance.checkOverTheAppPermission()
+DeviceScreenshot.instance.requestOverlayPermission();
+```

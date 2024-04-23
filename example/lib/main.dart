@@ -61,7 +61,6 @@ class _MyAppState extends State<MyApp> {
                 ExampleButton(
                   onPressed: () async {
                     bool mediaProjectionService = await DeviceScreenshot.instance.checkMediaProjectionService();
-                    print('mediaProjectionService : $mediaProjectionService');
                     setState(() {
                       message = 'Media projection service status: $mediaProjectionService';
                     });
