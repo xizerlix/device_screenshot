@@ -3,9 +3,7 @@ package com.hasantoufiqahamed.device_screenshot
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
-import android.app.AppOpsManager
 import android.content.Context
-import androidx.core.content.ContextCompat
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.PixelFormat
@@ -15,13 +13,11 @@ import android.media.ImageReader
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
-import android.os.Binder
 import android.os.Build
-import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.View
 import android.view.WindowManager
+import androidx.core.content.ContextCompat
 import com.hasantoufiqahamed.device_screenshot.src.MediaProjectionService
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -38,11 +34,6 @@ import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
-inline fun <reified T> systemService(context: Context): T? =
-    ContextCompat.getSystemService(context, T::class.java)
-
-const val API_APPLICATION_OVERLAY = 26
 
 class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.ActivityResultListener {
     private var context: Context? = null
@@ -66,14 +57,6 @@ class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, 
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
-
-            "checkOverTheAppPermission" -> {
-                result.success(canDrawOverlaysCompat(context!!))
-            }
-
-            "requestOverlayPermission" -> {
-                requestOverlayPermission()
-            }
 
             "checkMediaProjectionService" -> {
                 val isRunning = isServiceRunning(context!!, MediaProjectionService::class.java)
@@ -112,78 +95,6 @@ class DeviceScreenshotPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, 
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
-    }
-
-    private fun canDrawOverlaysCompat(context: Context): Boolean {
-        // Android 5 always allow overlay.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return true
-
-        // (Android 7+) if Settings.canDrawOverlays(context) == true, it's reliable.
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && Settings.canDrawOverlays(context)) return true
-
-        // Android 6 と Android 8, 8.1 はバグがあるので
-        // 許可されていても Settings.canDrawOverlays(context) がfalseを返す場合がある
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            // AppOpsManager.checkOp() は API 29 でdeprecated
-
-            systemService<AppOpsManager>(context)?.let { manager ->
-                try {
-                    @Suppress("DEPRECATION")
-                    val result = manager.checkOp(
-                        AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW,
-                        Binder.getCallingUid(),
-                        context.packageName
-                    )
-                    return result == AppOpsManager.MODE_ALLOWED
-                } catch (_: Throwable) {
-                }
-            }
-        }
-
-        //id this fails, we definitely can't do it
-        systemService<WindowManager>(context)?.let { manager ->
-            try {
-                val viewToAdd = View(context)
-                val params = WindowManager.LayoutParams(
-                    0,
-                    0,
-                    if (Build.VERSION.SDK_INT >= API_APPLICATION_OVERLAY) {
-                        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                    } else {
-                        @Suppress("DEPRECATION")
-                        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
-                    },
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
-                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSPARENT
-                )
-                viewToAdd.layoutParams = params
-                manager.addView(viewToAdd, params)
-                manager.removeView(viewToAdd)
-                return true
-            } catch (_: Throwable) {
-            }
-        }
-
-        return false
-
-    }
-
-    private fun requestOverlayPermission() {
-        val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:${context!!.packageName}")
-            )
-        } else {
-            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            intent.data = Uri.fromParts("package", context?.packageName, null)
-        }
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context!!.startActivity(intent)
     }
 
     interface ImageAndUriAvailableCallback {

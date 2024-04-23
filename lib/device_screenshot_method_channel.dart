@@ -10,12 +10,6 @@ class MethodChannelDeviceScreenshot extends DeviceScreenshotPlatform {
   final methodChannel = const MethodChannel('device_screenshot');
 
   @override
-  Future<bool> checkOverTheAppPermission() async {
-    final permission = await methodChannel.invokeMethod<bool>('checkOverTheAppPermission');
-    return permission ?? false;
-  }
-
-  @override
   Future<bool> checkMediaProjectionService() async {
     final permission = await methodChannel.invokeMethod<bool>('checkMediaProjectionService');
     return permission ?? false;
@@ -26,11 +20,6 @@ class MethodChannelDeviceScreenshot extends DeviceScreenshotPlatform {
     final uriPath = await methodChannel.invokeMethod<String>('takeScreenshot');
     Uri uri = Uri.file(uriPath ?? '');
     return uriPath == null ? null : uri;
-  }
-
-  @override
-  void requestOverlayPermission() async {
-    await methodChannel.invokeMethod('requestOverlayPermission');
   }
 
   @override

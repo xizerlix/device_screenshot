@@ -23,16 +23,8 @@ abstract class DeviceScreenshotPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<bool> checkOverTheAppPermission() {
-    throw UnimplementedError('checkOverTheAppPermission() has not been implemented.');
-  }
-
   Future<bool> checkMediaProjectionService() {
     throw UnimplementedError('checkMediaProjectionService() has not been implemented.');
-  }
-
-  void requestOverlayPermission() {
-    throw UnimplementedError('requestOverlayPermission() has not been implemented.');
   }
 
   Future<Uri?> takeScreenshot() {
