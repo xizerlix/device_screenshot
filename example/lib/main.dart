@@ -43,23 +43,6 @@ class _MyAppState extends State<MyApp> {
                 ),
                 ExampleButton(
                   onPressed: () async {
-                    bool overTheAppPermission = await DeviceScreenshot.instance.checkOverTheAppPermission();
-                    setState(() {
-                      message = 'Over the app permission status: $overTheAppPermission';
-                    });
-                  },
-                  title: 'Check Over The App Permission',
-                ),
-                ExampleButton(
-                  onPressed: () async {
-                    if (!await DeviceScreenshot.instance.checkOverTheAppPermission()) {
-                      DeviceScreenshot.instance.requestOverlayPermission();
-                    }
-                  },
-                  title: 'Request Over The App Permission',
-                ),
-                ExampleButton(
-                  onPressed: () async {
                     bool mediaProjectionService = await DeviceScreenshot.instance.checkMediaProjectionService();
                     setState(() {
                       message = 'Media projection service status: $mediaProjectionService';
