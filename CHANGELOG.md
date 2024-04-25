@@ -17,3 +17,9 @@
 ## 0.0.5
 
 * Remove ios platform and documentation correction
+
+## 0.0.6
+
+* Delay added on capture screenshot
+* Services addd
+* Documentation upgrade

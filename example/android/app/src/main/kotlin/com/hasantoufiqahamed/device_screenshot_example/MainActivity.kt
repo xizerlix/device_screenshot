@@ -1,4 +1,4 @@
-package com.hasantoufiqahamed.device_screenshot_example
+package com.flutter.device_screenshot_example
 
 import io.flutter.embedding.android.FlutterActivity
 

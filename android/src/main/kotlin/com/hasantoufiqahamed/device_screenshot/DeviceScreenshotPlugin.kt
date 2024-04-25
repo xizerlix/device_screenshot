@@ -1,4 +1,4 @@
-package com.hasantoufiqahamed.device_screenshot
+package com.flutter.device_screenshot
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -18,7 +18,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
-import com.hasantoufiqahamed.device_screenshot.src.MediaProjectionService
+import com.flutter.device_screenshot.src.MediaProjectionService
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding

@@ -1,4 +1,4 @@
-package com.hasantoufiqahamed.device_screenshot
+package com.flutter.device_screenshot
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
