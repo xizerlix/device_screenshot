@@ -23,3 +23,7 @@
 * Delay added on capture screenshot
 * Services addd
 * Documentation upgrade
+
+## 0.0.7
+
+* Home naming issue solve
