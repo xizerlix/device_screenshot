@@ -1,6 +1,6 @@
 name: device_screenshot
 description: "A Flutter plugin that can helps you to take screenshot your overall device."
-version: 0.0.5
+version: 0.0.6
 homepage: https://github.com/HasanToufiqAhamed/device_screenshot
 
 environment:
@@ -22,5 +22,5 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.hasantoufiqahamed.device_screenshot
+        package: com.flutter.device_screenshot
         pluginClass: DeviceScreenshotPlugin

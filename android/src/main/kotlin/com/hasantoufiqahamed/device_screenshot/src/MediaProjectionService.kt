@@ -1,4 +1,4 @@
-package com.hasantoufiqahamed.device_screenshot.src
+package com.flutter.device_screenshot.src
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -53,6 +53,7 @@ class MediaProjectionService : Service() {
         val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Foreground Service")
             .setContentText("Running")
+            .setSmallIcon(android.R.drawable.ic_notification_overlay)
 
 //        Log.d("icon:::", "${iconResourceId}")
 //
