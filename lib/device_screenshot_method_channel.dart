@@ -16,7 +16,10 @@ class MethodChannelDeviceScreenshot extends DeviceScreenshotPlatform {
   }
 
   @override
-  Future<Uri?> takeScreenshot() async {
+  Future<Uri?> takeScreenshot({
+    Duration delay = Duration.zero,
+  }) async {
+    await Future.delayed(delay);
     final uriPath = await methodChannel.invokeMethod<String>('takeScreenshot');
     Uri uri = Uri.file(uriPath ?? '');
     return uriPath == null ? null : uri;

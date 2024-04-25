@@ -10,8 +10,10 @@ class DeviceScreenshot {
     return DeviceScreenshotPlatform.instance.checkMediaProjectionService();
   }
 
-  Future<Uri?> takeScreenshot() {
-    return DeviceScreenshotPlatform.instance.takeScreenshot();
+  Future<Uri?> takeScreenshot({
+    Duration delay = Duration.zero,
+  }) {
+    return DeviceScreenshotPlatform.instance.takeScreenshot(delay: delay);
   }
 
   void requestMediaProjection() {
