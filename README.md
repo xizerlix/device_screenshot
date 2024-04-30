@@ -12,14 +12,14 @@ A Flutter plugin that can helps you to take screenshot your overall device using
 
 ## 💻 Usage
 
-First, add ```flutter_native_splash``` as a dependency in your pubspec.yaml file.
+First, add ```device_screenshot``` as a dependency in your pubspec.yaml file.
 
 ```yml
 dependencies:
   flutter:
     sdk: flutter
 
-  device_screenshot: ^0.0.6
+  device_screenshot: ^update_version
 ```
 Don't forget to ```flutter pub get```.
 
@@ -38,18 +38,15 @@ android {
 ```
 
 ```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="com.example">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="...">
   ...
 
   <application
-        android:label="example"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        ...
         ...>
 
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
+            ...
             ...>
 
         <!--Add this-->
@@ -79,4 +76,16 @@ Use the singleton instance of `DeviceScreenshot` to access all the available met
 
 ```dart
 DeviceScreenshot.instance.checkMediaProjectionService()
+```
+
+## 📱 To take screenshot
+
+At first you need to run foreground service and for this
+```dart
+DeviceScreenshot.instance.requestMediaProjection()
+```
+
+Now you are ready to take your Device Screenshot.
+```dart
+Uri? uri = await DeviceScreenshot.instance.takeScreenshot()
 ```

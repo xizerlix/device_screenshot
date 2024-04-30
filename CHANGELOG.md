@@ -27,3 +27,7 @@
 ## 0.0.7
 
 * Home naming issue solve
+
+## 0.0.8
+
+* Documentation update
